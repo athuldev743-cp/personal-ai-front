@@ -3,6 +3,9 @@ const commandInput = document.getElementById("command");
 const sendBtn = document.getElementById("sendBtn");
 const voiceBtn = document.getElementById("voiceBtn");
 
+// Replace with your backend IP
+const API_URL = "http://192.168.1.5:8000/ask";  
+
 sendBtn.addEventListener("click", sendCommand);
 voiceBtn.addEventListener("click", startListening);
 
@@ -13,7 +16,7 @@ async function sendCommand() {
   responseDiv.textContent = "⏳ Sending command...";
 
   try {
-    const res = await fetch("http://192.168.1.5:8000/ask", {  // replace with your PC's LAN IP
+    const res = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text })
@@ -24,7 +27,6 @@ async function sendCommand() {
     const data = await res.json();
     responseDiv.textContent = data.response;
     speakText(data.response);
-    commandInput.value = "";
   } catch (err) {
     console.error(err);
     responseDiv.textContent = "❌ Error connecting to backend.";
