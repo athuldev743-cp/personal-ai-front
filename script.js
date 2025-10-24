@@ -3,8 +3,8 @@ const commandInput = document.getElementById("command");
 const sendBtn = document.getElementById("sendBtn");
 const voiceBtn = document.getElementById("voiceBtn");
 
-// Replace with your backend IP
-const API_URL = "https://presonal-agent.onrender.com";  
+// Correct backend endpoint
+const API_URL = "https://presonal-agent.onrender.com/ask";  
 
 sendBtn.addEventListener("click", sendCommand);
 voiceBtn.addEventListener("click", startListening);
