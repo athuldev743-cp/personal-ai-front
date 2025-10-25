@@ -4,7 +4,8 @@ const sendBtn = document.getElementById("sendBtn");
 const voiceBtn = document.getElementById("voiceBtn");
 
 // ✅ CORRECT BACKEND URL - Fixed spelling
-const API_URL = "https://personal-agent.onrender.com";
+const API_URL = "https://presonal-agent.onrender.com";
+
 
 sendBtn.addEventListener("click", () => sendCommand());
 voiceBtn.addEventListener("click", async () => {
@@ -18,6 +19,7 @@ voiceBtn.addEventListener("click", async () => {
 });
 
 // Send command to backend
+// Updated frontend fetch with specific headers
 async function sendCommand(userGesture = false) {
   const text = commandInput.value.trim();
   if (!text) return;
@@ -27,7 +29,11 @@ async function sendCommand(userGesture = false) {
   try {
     const res = await fetch(`${API_URL}/ask`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      mode: "cors", // Explicitly request CORS
       body: JSON.stringify({ text })
     });
 
@@ -36,7 +42,6 @@ async function sendCommand(userGesture = false) {
     const data = await res.json();
     responseDiv.textContent = data.response;
 
-    // Speak only if triggered by user gesture
     if (userGesture || typeof window.orientation === "undefined") {
       speakText(data.response);
     }
@@ -46,7 +51,6 @@ async function sendCommand(userGesture = false) {
     responseDiv.textContent = "❌ Error connecting to backend. Check console for details.";
   }
 }
-
 // Voice input
 function startListening() {
   return new Promise((resolve, reject) => {
