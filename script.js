@@ -3,16 +3,15 @@ const commandInput = document.getElementById("command");
 const sendBtn = document.getElementById("sendBtn");
 const voiceBtn = document.getElementById("voiceBtn");
 
-// Replace with your backend URL
-const API_URL = "https://presonal-agent.onrender.com";
+// ✅ CORRECT BACKEND URL - Fixed spelling
+const API_URL = "https://personal-agent.onrender.com";
 
 sendBtn.addEventListener("click", () => sendCommand());
 voiceBtn.addEventListener("click", async () => {
   try {
-    // Start listening and wait for user to speak
     const spokenText = await startListening();
     commandInput.value = spokenText;
-    sendCommand(true); // true = triggered by user gesture
+    sendCommand(true);
   } catch (err) {
     responseDiv.textContent = "❌ Voice input error: " + err;
   }
@@ -37,20 +36,25 @@ async function sendCommand(userGesture = false) {
     const data = await res.json();
     responseDiv.textContent = data.response;
 
-    // Speak only if triggered by a user gesture (mobile restriction)
+    // Speak only if triggered by user gesture
     if (userGesture || typeof window.orientation === "undefined") {
       speakText(data.response);
     }
 
   } catch (err) {
     console.error(err);
-    responseDiv.textContent = "❌ Error connecting to backend.";
+    responseDiv.textContent = "❌ Error connecting to backend. Check console for details.";
   }
 }
 
 // Voice input
 function startListening() {
   return new Promise((resolve, reject) => {
+    if (!(window.SpeechRecognition || window.webkitSpeechRecognition)) {
+      reject("Speech recognition not supported");
+      return;
+    }
+
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = "en-US";
     recognition.interimResults = false;
@@ -70,7 +74,7 @@ function startListening() {
 
 // Voice output
 function speakText(text) {
-  if (!window.speechSynthesis) return; // fallback for unsupported browsers
+  if (!window.speechSynthesis) return;
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "en-US";
   speechSynthesis.speak(utterance);
