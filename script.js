@@ -4,7 +4,7 @@ const sendBtn = document.getElementById("sendBtn");
 const voiceBtn = document.getElementById("voiceBtn");
 
 // ✅ CORRECT BACKEND URL - Fixed spelling
-const API_URL = "https://presonal-agent.onrender.com";
+const API_URL = " http://127.0.0.1:8000";
 
 
 sendBtn.addEventListener("click", () => sendCommand());
